@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-/* User controller */
+/* User handler */
 public class UserHandler {
     private final UserService userService;
     private final ObjectMapper mapper;
@@ -25,6 +25,11 @@ public class UserHandler {
     /* return all users */
     public void getAllUsers(Context ctx) {
         ctx.json(userService.findAllUsers());
+    }
+
+    /* return user with matching names */
+    public void getUsersByName(Context ctx) {
+        ctx.json(userService.findAllUsersByUsername(ctx.req.getParameter("name")));
     }
 
     /* save user */

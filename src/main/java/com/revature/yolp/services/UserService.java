@@ -9,6 +9,7 @@ import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 import java.util.List;
 import java.util.UUID;
 
+/* validate and retrieve data from DAO class */
 public class UserService {
     private final UserDAO userDAO;
 
@@ -17,7 +18,7 @@ public class UserService {
     }
 
     public void signup(NewUserRequest req) {
-        List<String> usernames = userDAO.getAllUsernames();
+        List<String> usernames = userDAO.findAllUsernames();
 
         if (usernames.contains(req.getUsername())) {
             throw new InvalidUserException("Username is already taken");
@@ -43,6 +44,11 @@ public class UserService {
         return userDAO.findAll();
     }
 
+    public List<User> findAllUsersByUsername(String name) {
+        return userDAO.findAllUsersByUsername(name);
+    }
+
+    /* helper methods */
     private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }

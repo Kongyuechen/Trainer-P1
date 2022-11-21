@@ -29,6 +29,9 @@ public class Router {
                 get(userHandler::getAllUsers);
                 post(userHandler::saveUser);
             });
+            path("/users/name", () -> {
+                get(userHandler::getUsersByName);
+            });
 
             /* restaurants path */
             path("restaurants", () -> {

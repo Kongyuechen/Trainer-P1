@@ -58,7 +58,7 @@ public class UserDAO implements CrudDAO<User> {
     }
 
     /* custom user dao methods */
-    public List<String> getAllUsernames() {
+    public List<String> findAllUsernames() {
         List<String> usernames = new ArrayList<>();
 
         try (Connection con = ConnectionFactory.getInstance().getConnection()) {
@@ -74,5 +74,24 @@ public class UserDAO implements CrudDAO<User> {
         }
 
         return usernames;
+    }
+
+    public List<User> findAllUsersByUsername(String name) {
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users where username like ?");
+            ps.setString(1, name + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Roles.valueOf(rs.getString("role")));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 }
