@@ -6,17 +6,17 @@ import java.util.List;
 
 public class ReviewDAO implements CrudDAO<Review> {
     @Override
-    public void save() {
+    public void save(Review obj) {
 
     }
 
     @Override
-    public void delete() {
+    public void delete(Review obj) {
 
     }
 
     @Override
-    public void update() {
+    public void update(Review obj) {
 
     }
 
