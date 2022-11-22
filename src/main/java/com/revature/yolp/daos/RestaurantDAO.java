@@ -6,17 +6,17 @@ import java.util.List;
 
 public class RestaurantDAO implements CrudDAO<Restaurant> {
     @Override
-    public void save() {
+    public void save(Restaurant obj) {
 
     }
 
     @Override
-    public void delete() {
+    public void delete(Restaurant obj) {
 
     }
 
     @Override
-    public void update() {
+    public void update(Restaurant obj) {
 
     }
 
