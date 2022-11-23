@@ -1,5 +1,5 @@
 package com.revature.yolp.models;
 
-public enum Roles {
+public enum Role {
     ADMIN, DEFAULT
 }

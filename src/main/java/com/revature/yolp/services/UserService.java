@@ -1,11 +1,15 @@
 package com.revature.yolp.services;
 
 import com.revature.yolp.daos.UserDAO;
-import com.revature.yolp.dtos.NewUserRequest;
-import com.revature.yolp.models.Roles;
+import com.revature.yolp.dtos.requests.NewLoginRequest;
+import com.revature.yolp.dtos.requests.NewUserRequest;
+import com.revature.yolp.dtos.responses.Principal;
+import com.revature.yolp.models.Role;
 import com.revature.yolp.models.User;
+import com.revature.yolp.utils.custom_exceptions.InvalidAuthException;
 import com.revature.yolp.utils.custom_exceptions.InvalidUserException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,8 +40,15 @@ public class UserService {
             throw new InvalidUserException("Password does not match");
         }
 
-        User createdUser = new User(UUID.randomUUID().toString(), req.getUsername(), req.getPassword1(), Roles.DEFAULT);
+        User createdUser = new User(UUID.randomUUID().toString(), req.getUsername(), req.getPassword1(), Role.DEFAULT);
         userDAO.save(createdUser);
+    }
+
+    public Principal login(NewLoginRequest req) {
+        User validUser = userDAO.getUserByUsernameAndPassword(req.getUsername(), req.getPassword());
+        if (validUser == null) throw new InvalidAuthException("Invalid username or password");
+        Principal principal = new Principal(validUser.getId(), validUser.getUsername(), validUser.getRole());
+        return principal;
     }
 
     public List<User> findAllUsers() {

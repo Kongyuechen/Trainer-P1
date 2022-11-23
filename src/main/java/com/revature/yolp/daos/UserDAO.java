@@ -1,10 +1,9 @@
 package com.revature.yolp.daos;
 
-import com.revature.yolp.models.Roles;
+import com.revature.yolp.models.Role;
 import com.revature.yolp.models.User;
 import com.revature.yolp.utils.ConnectionFactory;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Roles.valueOf(rs.getString("role")));
+                User user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Role.valueOf(rs.getString("role")));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -85,7 +84,7 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Roles.valueOf(rs.getString("role")));
+                User user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Role.valueOf(rs.getString("role")));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -93,5 +92,23 @@ public class UserDAO implements CrudDAO<User> {
         }
 
         return users;
+    }
+
+    public User getUserByUsernameAndPassword(String username, String password) {
+        User user = null;
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                user = new User(rs.getString("id"), rs.getString("username"), rs.getString("password"), Role.valueOf(rs.getString("role")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }

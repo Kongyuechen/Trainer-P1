@@ -1,19 +1,19 @@
-package com.revature.yolp.models;
+package com.revature.yolp.dtos.responses;
 
-public class User {
+import com.revature.yolp.models.Role;
+
+public class Principal {
     private String id;
     private String username;
-    private String password;
     private Role role;
 
-    public User() {
+    public Principal() {
         super();
     }
 
-    public User(String id, String username, String password, Role role) {
+    public Principal(String id, String username, Role role) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.role = role;
     }
 
@@ -33,14 +33,6 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -51,10 +43,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Principal{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 '}';
     }

@@ -1,4 +1,4 @@
-package com.revature.yolp.dtos;
+package com.revature.yolp.dtos.requests;
 
 public class NewUserRequest {
     private String username;
