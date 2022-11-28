@@ -30,14 +30,31 @@ public class UserHandler {
         this.mapper = mapper;
     }
 
-    public void signup(Context c) throws IOException {
-        NewUserRequest req = mapper.readValue(c.req.getInputStream(), NewUserRequest.class);
+    public void signup(Context ctx) throws IOException {
+        NewUserRequest req = mapper.readValue(ctx.req.getInputStream(), NewUserRequest.class);
+
         try {
-            userService.saveUser(req);
-            c.status(201); // CREATED
+            logger.info("Attempting to signup...");
+
+            User createdUser;
+
+            if (userService.isValidUsername(req.getUsername())) {
+                if (!userService.isDuplicateUsername(req.getUsername())) {
+                    if (userService.isValidPassword(req.getPassword1())) {
+                        if (userService.isSamePassword(req.getPassword1(), req.getPassword2())) {
+                            createdUser = userService.signup(req);
+                        } else throw new InvalidUserException("Passwords doe not match");
+                    } else throw new InvalidUserException("Password needs to be minimum 8 characters long, and one number");
+                } else throw new InvalidUserException("Username is already taken");
+            } else throw new InvalidUserException("Username needs to be 8 - 20 characters long");
+
+            ctx.status(201); // CREATED
+            ctx.json(createdUser.getId());
+            logger.info("Signup attempt successful...");
         } catch (InvalidUserException e) {
-            c.status(403); // FORBIDDEN
-            c.json(e);
+            ctx.status(403); // FORBIDDEN
+            ctx.json(e);
+            logger.info("Signup attempt unsuccessful...");
         }
     }
 
